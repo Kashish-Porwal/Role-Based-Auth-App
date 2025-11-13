@@ -4,6 +4,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { authAPI, User } from '@/lib/api';
 import { BackgroundLines } from '@/components/ui/background-lines';
+import { BackgroundBeams } from '@/components/ui/background-beams';
+import { Spotlight } from '@/components/ui/spotlight';
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -52,7 +54,9 @@ export default function DashboardPage() {
   }
 
   return (
-    <div className="min-h-screen relative bg-neutral-900">
+    <div className="relative min-h-screen overflow-hidden bg-neutral-950 text-white">
+      <BackgroundBeams className="opacity-85" />
+      <Spotlight className="opacity-65 mix-blend-screen" size={740} strength={0.35} />
       <BackgroundLines count={65} />
       <div className="container mx-auto px-4 py-12 relative z-10">
         <div className="max-w-5xl mx-auto">
