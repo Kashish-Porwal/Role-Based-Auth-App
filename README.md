@@ -215,48 +215,42 @@ Authorization: Bearer <token>
 
 ## 🚢 Deployment
 
-### Backend Deployment (Render/Railway)
+This repository includes deployment manifests for both the frontend (`vercel.json`) and backend (`render.yaml`) so you can deploy with almost no manual configuration.
 
-1. **Render:**
-   - Push your code to GitHub
-   - Create a new Web Service on Render
-   - Connect your GitHub repository
-   - Set build command: `cd backend && npm install && npm run build`
-   - Set start command: `cd backend && npm start`
-   - Add environment variables from your `.env` file
-   - Deploy
+### Frontend – Vercel
 
-2. **Railway:**
-   - Push your code to GitHub
-   - Create a new project on Railway
-   - Connect your GitHub repository
-   - Add MongoDB service (or use MongoDB Atlas)
-   - Set environment variables
-   - Deploy
+`vercel.json` instructs Vercel to treat the `frontend/` folder as the project root and to use the official Next.js builder. To deploy:
 
-3. **Vercel Serverless:**
-   - Install Vercel CLI: `npm i -g vercel`
-   - Navigate to backend directory: `cd backend`
-   - Run: `vercel`
-   - Configure environment variables
+1. Push your code to GitHub (or another Git provider that Vercel supports).
+2. Click **Import Project** on Vercel and select this repo.
+3. Vercel automatically picks up `vercel.json`, so the Framework preset becomes **Next.js** and the root directory is already set to `frontend/`.
+4. Add the environment variable `NEXT_PUBLIC_API_URL` (pointing to your Render backend URL).
+5. Click **Deploy**. Vercel will run `npm install` + `npm run build` in `frontend/` and host the Next.js app.
 
-### Frontend Deployment (Vercel/Netlify)
+> If you prefer deploying manually via the CLI, run `cd frontend && vercel --prod`.
 
-1. **Vercel:**
-   - Push your code to GitHub
-   - Import project on Vercel
-   - Set root directory to `frontend`
-   - Add environment variable: `NEXT_PUBLIC_API_URL` (your backend URL)
-   - Deploy
+### Backend – Render
 
-2. **Netlify:**
-   - Push your code to GitHub
-   - Create a new site on Netlify
-   - Connect your GitHub repository
-   - Set build command: `cd frontend && npm run build`
-   - Set publish directory: `frontend/.next`
-   - Add environment variable: `NEXT_PUBLIC_API_URL`
-   - Deploy
+A `render.yaml` file lives in the repo root to describe the backend web service. Render will automatically read this file and apply the correct commands:
+
+- Root directory: `backend`
+- Build command: `npm install && npm run build`
+- Start command: `npm run start`
+
+Steps:
+1. Push your repo to GitHub.
+2. On Render, choose **New > Blueprint** and select this repository. Render will detect `render.yaml`.
+3. Provide the required environment variables (`DATABASE_URL`, `JWT_SECRET`, `FRONTEND_URL`, `PORT`).
+4. Click **Deploy**. Render builds the TypeScript backend and runs the compiled server.
+
+> You can also create the service manually on Render by setting the same build/start commands and pointing the root directory to `backend/`.
+
+### Alternative Hosting Options
+
+If you want to use other providers:
+
+- **Netlify (frontend only)**: build command `cd frontend && npm run build`, publish directory `frontend/.next`.
+- **Railway / Fly.io (backend)**: build command `npm install && npm run build`, start command `npm run start` with root directory `backend/`.
 
 ### Environment Variables for Deployment
 
