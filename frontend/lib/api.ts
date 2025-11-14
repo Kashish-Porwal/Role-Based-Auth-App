@@ -20,6 +20,25 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
+// Add response interceptor for better error handling
+api.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response) {
+      // Server responded with error
+      console.error('API Error:', error.response.data);
+    } else if (error.request) {
+      // Request made but no response
+      console.error('Network Error:', error.request);
+      error.message = 'Network error. Please check your connection and API URL.';
+    } else {
+      // Something else happened
+      console.error('Error:', error.message);
+    }
+    return Promise.reject(error);
+  }
+);
+
 export interface User {
   id: string;
   email: string;

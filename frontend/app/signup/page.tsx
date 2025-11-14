@@ -34,7 +34,11 @@ export default function SignupPage() {
       localStorage.setItem('user', JSON.stringify(response.user));
       router.push('/dashboard');
     } catch (err: any) {
-      setError(err.response?.data?.error || 'Signup failed. Please try again.');
+      console.error('Signup error:', err);
+      const errorMessage = err.response?.data?.error 
+        || err.message 
+        || 'Signup failed. Please check your connection and try again.';
+      setError(errorMessage);
     } finally {
       setIsLoading(false);
     }
